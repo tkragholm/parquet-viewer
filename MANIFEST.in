@@ -1,3 +1,4 @@
 include bin/parquet-viewer*
+include bin/*.exe
 include LICENSE*
 include README.md

@@ -23,28 +23,34 @@ jobs:
           - os: ubuntu-latest
             wheel_platform: manylinux_2_28_x86_64
             rust_target: x86_64-unknown-linux-gnu
+            bin_name: parquet-viewer
 
           - os: ubuntu-latest
             wheel_platform: manylinux_2_28_aarch64
             rust_target: aarch64-unknown-linux-gnu
+            bin_name: parquet-viewer
 
           # Windows wheels
           - os: windows-latest
             wheel_platform: win_amd64
             rust_target: x86_64-pc-windows-msvc
+            bin_name: parquet-viewer.exe
 
           - os: windows-latest
             wheel_platform: win32
             rust_target: i686-pc-windows-msvc
+            bin_name: parquet-viewer.exe
 
           # macOS wheels
           - os: macos-latest
             wheel_platform: macosx_10_12_x86_64
             rust_target: x86_64-apple-darwin
+            bin_name: parquet-viewer
 
           - os: macos-latest
             wheel_platform: macosx_11_0_arm64
             rust_target: aarch64-apple-darwin
+            bin_name: parquet-viewer
 
     steps:
       - uses: actions/checkout@v3
@@ -59,11 +65,12 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           if_no_artifact_found: error
 
-      - name: List downloaded files
+      - name: Prepare binary for packaging
         shell: bash
         run: |
-          echo "Contents of bin directory:"
           ls -la bin/
+          chmod +x bin/* || true
+          cp bin/${{ matrix.bin_name }} bin/parquet-viewer${{ runner.os == 'Windows' && '.exe' || '' }}
 
       - name: Setup Python
         uses: actions/setup-python@v4
