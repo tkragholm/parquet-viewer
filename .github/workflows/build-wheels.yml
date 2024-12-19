@@ -70,7 +70,10 @@ jobs:
         run: |
           ls -la bin/
           chmod +x bin/* || true
-          cp bin/${{ matrix.bin_name }} bin/parquet-viewer${{ runner.os == 'Windows' && '.exe' || '' }}
+          target_name="parquet-viewer${{ runner.os == 'Windows' && '.exe' || '' }}"
+          if [ "${{ matrix.bin_name }}" != "$target_name" ]; then
+            cp "bin/${{ matrix.bin_name }}" "bin/$target_name"
+          fi
 
       - name: Setup Python
         uses: actions/setup-python@v4
