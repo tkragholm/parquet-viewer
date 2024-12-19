@@ -1,0 +1,3 @@
+include bin/parquet-viewer*
+include LICENSE*
+include README.md

@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+packages = ["pv"]
+
+[project]
+name = "parquetv"
+version = "0.1.0"
+description = "A high-performance Parquet file viewer with CSV export capabilities"
+authors = [{ name = "Tobias Kragholm", email = "tkragholm@gmail.com" }]
+license = { text = "MIT OR Apache-2.0" }
+readme = "README.md"
+keywords = ["parquet", "csv", "viewer", "data", "converter"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Topic :: Database",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+
+[project.urls]
+Homepage = "https://github.com/tkragholm/parquet-viewer"
+Repository = "https://github.com/tkragholm/parquet-viewer.git"
+Issues = "https://github.com/tkragholm/parquet-viewer/issues"
+
+[project.scripts]
+parquet-viewer = "pv:main"
+pv = "pv:main"
