@@ -12,7 +12,7 @@ include-package-data = true
 
 [project]
 name = "parquetv"
-version = "0.1.1"
+version = "0.1.6"
 description = "A high-performance Parquet file viewer with CSV export capabilities"
 authors = [{ name = "Tobias Kragholm", email = "tkragholm@gmail.com" }]
 license = { text = "MIT OR Apache-2.0" }
