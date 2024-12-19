@@ -40,14 +40,6 @@ core-foundation = "0.9"
 core-foundation-sys = "0.8"
 
 
-# Development dependencies
-[dev-dependencies]
-criterion = "0.5.1"
-
-[[bench]]
-name = "parquet_viewer_bench"
-harness = false
-
 # Build configuration
 [profile.release]
 opt-level = 3

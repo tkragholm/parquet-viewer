@@ -1,4 +1,3 @@
-use num_cpus;
 use parking_lot::Mutex;
 use rayon::prelude::*;
 use std::fmt::Write;
@@ -368,7 +367,7 @@ fn main() -> Result<()> {
         wtr.flush().context("Failed to flush CSV writer")?;
         progress.finish();
 
-        if let Err(e) = csvlens::run_csvlens(&[temp_csv.path().to_str().unwrap()]) {
+        if let Err(e) = csvlens::run_csvlens([temp_csv.path().to_str().unwrap()]) {
             eprintln!("Error displaying CSV: {}", e);
         }
     }
