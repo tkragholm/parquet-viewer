@@ -25,6 +25,11 @@ class InstallPlatlib(install):
 
 # Determine the binary name based on the platform
 binary_name = 'parquet-viewer.exe' if sys.platform == 'win32' else 'parquet-viewer'
+binary_path = os.path.join('bin', binary_name)
+
+# Verify binary exists
+if not os.path.exists(binary_path):
+    raise FileNotFoundError(f"Binary not found: {binary_path}")
 
 setup(
     cmdclass={
@@ -35,7 +40,7 @@ setup(
     package_dir={"": "src"},
     include_package_data=True,
     data_files=[
-        ("bin", [os.path.join("bin", binary_name)]),
+        ('bin', [binary_path]),
     ],
     scripts=["postinstall.py"],
 )

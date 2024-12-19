@@ -103,6 +103,8 @@ jobs:
         run: |
           echo "Wheel contents:"
           unzip -l dist/*.whl
+          echo "Looking for binary in wheel:"
+          unzip -l dist/*.whl | grep -i "parquet-viewer"
 
       - name: Upload wheel artifact
         uses: actions/upload-artifact@v3

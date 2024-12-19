@@ -1,32 +1,39 @@
-import subprocess
+import os
 import sys
 from pathlib import Path
+
+import pkg_resources
 
 
 def main():
     try:
-        # Get the path to the installed binary
-        package_dir = Path(__file__).parent
-        binary_name = (
-            "parquet-viewer.exe" if sys.platform == "win32" else "parquet-viewer"
-        )
-        binary_path = package_dir.parent.parent / "bin" / binary_name
+        # Get the binary name based on platform
+        binary_name = 'parquet-viewer.exe' if sys.platform == 'win32' else 'parquet-viewer'
 
-        if not binary_path.exists():
+        # Try to find the binary using pkg_resources
+        try:
+            binary_path = pkg_resources.resource_filename('pv', os.path.join('bin', binary_name))
+        except Exception:
+            # Fallback to looking in the package directory
+            package_dir = Path(__file__).parent.parent
+            binary_path = str(package_dir / 'bin' / binary_name)
+
+        if not os.path.exists(binary_path):
             print(f"Error: Binary not found at {binary_path}", file=sys.stderr)
             sys.exit(1)
 
         # Make binary executable on Unix-like systems
-        if sys.platform != "win32":
-            binary_path.chmod(binary_path.stat().st_mode | 0o755)
+        if sys.platform != 'win32':
+            os.chmod(binary_path, 0o755)
+
+        # Convert all arguments to strings
+        args = [str(binary_path)] + [str(arg) for arg in sys.argv[1:]]
 
         # Execute the binary with any provided arguments
-        result = subprocess.run([str(binary_path)] + sys.argv[1:])
-        sys.exit(result.returncode)
+        os.execv(str(binary_path), args)
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
