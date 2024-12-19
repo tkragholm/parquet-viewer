@@ -5,21 +5,34 @@ on:
     workflows: ["Build Python Wheels"]
     types:
       - completed
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Are you sure you want to publish to PyPI?"
+        type: boolean
+        required: true
+        default: false
 
 jobs:
   publish:
     name: Publish to PyPI
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: |
+      (github.event_name == 'workflow_dispatch' && inputs.confirm == true) ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
     environment: pypi
     permissions:
       id-token: write
 
     steps:
       - name: Download all wheel artifacts
-        uses: actions/download-artifact@v3
+        uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: build-wheels.yml
+          workflow_conclusion: success
           path: dist
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          if_no_artifact_found: error
 
       - name: Prepare wheels for upload
         run: |
@@ -35,6 +48,5 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: wheels/
-          password: ${{ secrets.PYPI_API_TOKEN }}
           skip-existing: true
           verbose: true
